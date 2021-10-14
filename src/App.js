@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { createGlobalStyle } from 'styled-components';
 import styled from 'styled-components';
 import GameBoard from './components/GameBoard';
+import { checkBoard } from './lib/checkBoard';
 
 const GlobalStyle = createGlobalStyle`
  *{
@@ -36,15 +37,39 @@ const Container = styled.div`
 
 function App() {
   const [currentPlayer, setCurrentPlayer] = useState('O');
+  const [squares, setSquares] = useState(new Array(9).fill(null));
+
+  const changePlayer = () => {
+    if (currentPlayer === 'O') setCurrentPlayer('X');
+    else setCurrentPlayer('O');
+  };
+
+  const onReset = () => {
+    setSquares(new Array(9).fill(null));
+    setCurrentPlayer('O');
+  };
+
+  const onChoose = useCallback(
+    (id) => {
+      setSquares(
+        squares.map((square, index) => (index === id ? currentPlayer : square))
+      );
+      console.log(squares, currentPlayer);
+      if (checkBoard(squares, currentPlayer)) {
+        onReset();
+      } else changePlayer();
+    },
+    [squares, currentPlayer]
+  );
 
   return (
     <>
       <GlobalStyle />
       <Container>
         <h1>React Tic Tac Toe with Hooks</h1>
-        <GameBoard currentPlayer={currentPlayer} />
-        <span>Next Player: O</span>
-        <button>Reset</button>
+        <GameBoard squares={squares} onChoose={onChoose} />
+        <span>Current Player: {currentPlayer}</span>
+        <button onClick={onReset}>Reset</button>
       </Container>
     </>
   );

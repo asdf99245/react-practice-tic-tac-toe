@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import BoardSquare from './BoardSquare';
 
@@ -10,15 +10,7 @@ const Board = styled.div`
   grid-template-rows: repeat(3, 1fr);
 `;
 
-function GameBoard({ currentPlayer }) {
-  const [squares, setSquares] = useState(new Array(9).fill(null));
-
-  const onChoose = (id) => {
-    setSquares(
-      squares.map((square, index) => (index === id ? currentPlayer : square))
-    );
-  };
-
+function GameBoard({ squares, onChoose }) {
   return (
     <Board>
       {squares.map((square, index) => (
