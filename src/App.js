@@ -31,25 +31,36 @@ const Container = styled.div`
     font-size: 24px;
     margin: 12px 0px 18px;
   }
-  button {
-    font-size: 24px;
-    border-radius: 4px;
-    border: none;
-    padding: 10px 20px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    &:hover {
-      transform: scale(1.1);
-    }
+`;
+
+const ResetButton = styled.button`
+  font-size: 24px;
+  border-radius: 4px;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  &:hover {
+    transform: scale(1.1);
   }
 `;
 
 function App() {
   const [currentPlayer, setCurrentPlayer] = useState('O');
   const [squares, setSquares] = useState(new Array(9).fill(null));
+  const [winner, setWinner] = useState(null);
+  const [modal, setModal] = useState(null);
 
   useEffect(() => {
-    if (checkBoard(squares, currentPlayer === 'X' ? 'O' : 'X')) {
+    const player = currentPlayer === 'X' ? 'O' : 'X';
+    if (checkBoard.checkSuccess(squares, player)) {
+      // winner가 있는지 확인
+      setModal(`🏆승자는 ${winner}입니다.`);
+      setWinner(player);
+      onReset();
+    } else if (checkBoard.checkFull(squares)) {
+      // 무승부
+      setModal(`무승부입니다.`);
       onReset();
     }
   }, [squares, currentPlayer]);
@@ -77,15 +88,20 @@ function App() {
     [squares]
   );
 
+  // 모달 close
+  const onClose = () => {
+    setModal(null);
+  };
+
   return (
     <>
       <GlobalStyle />
       <Container>
+        {modal && <Modal onClose={onClose}>{modal}</Modal>}
         <h1>React Tic Tac Toe</h1>
         <GameBoard squares={squares} onChoose={onChoose} />
         <span>Current Player : {currentPlayer}</span>
-        <button onClick={onReset}>RESET</button>
-        {/* <Modal /> */}
+        <ResetButton onClick={onReset}>RESET</ResetButton>
       </Container>
     </>
   );

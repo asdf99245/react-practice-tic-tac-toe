@@ -1,5 +1,24 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
+import { BsXLg } from 'react-icons/bs';
+
+const fadeIn = keyframes`
+  from {
+    opacity:0;
+  }
+  to{
+    opacity:1;
+  }
+`;
+
+const slideUp = keyframes`
+  from {
+    transform:translateY(100px);
+  }
+  to {
+    transform:translateY(0px);
+  }
+`;
 
 const Background = styled.div`
   position: fixed;
@@ -11,6 +30,11 @@ const Background = styled.div`
   display: flex;
   justify-content: center;
   z-index: 99;
+
+  animation-name: ${fadeIn};
+  animation-duration: 0.5s;
+  animation-timing-function: ease-out;
+  animation-fill-mode: forwards;
 `;
 
 const ModalBox = styled.div`
@@ -19,20 +43,43 @@ const ModalBox = styled.div`
   margin-top: 250px;
   z-index: 100;
   background-color: white;
-  border-radius: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  border-radius: 4px;
   color: black;
-  font-size: 32px;
+  font-size: 24px;
   font-weight: 500;
-  box-shadow: 0px 8px 24px #373737;
+  padding: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+
+  animation-name: ${slideUp};
+  animation-duration: 0.5s;
+  animation-timing-function: ease-out;
+  animation-fill-mode: forwards;
 `;
 
-function Modal() {
+const CloseButton = styled.button`
+  padding: 0;
+  display: block;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  position: absolute;
+  font-size: 18px;
+  right: 10px;
+  top: 10px;
+`;
+
+function Modal({ children, onClose }) {
   return (
     <Background>
-      <ModalBox>Winner is O!</ModalBox>
+      <ModalBox>
+        <CloseButton onClick={onClose}>
+          <BsXLg />
+        </CloseButton>
+        {children}
+      </ModalBox>
     </Background>
   );
 }
