@@ -1,9 +1,10 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { createGlobalStyle } from 'styled-components';
+import { useSelector, useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import GameBoard from './components/GameBoard';
-import { checkBoard } from './lib/checkBoard';
 import Modal from './components/Modal';
+import { reset } from './modules/game';
 
 const GlobalStyle = createGlobalStyle`
  *{
@@ -46,47 +47,15 @@ const ResetButton = styled.button`
 `;
 
 function App() {
-  const [currentPlayer, setCurrentPlayer] = useState('O');
-  const [squares, setSquares] = useState(new Array(9).fill(null));
-  const [winner, setWinner] = useState(null);
-  const [modal, setModal] = useState(null);
-
-  useEffect(() => {
-    const player = currentPlayer === 'X' ? 'O' : 'X';
-    if (checkBoard.checkSuccess(squares, player)) {
-      // winner가 있는지 확인
-      setModal(`🏆승자는 ${winner}입니다.`);
-      setWinner(player);
-      onReset();
-    } else if (checkBoard.checkFull(squares)) {
-      // 무승부
-      setModal(`무승부입니다.`);
-      onReset();
-    }
-  }, [squares, currentPlayer]);
-
-  // 플레이어 변경
-  const changePlayer = () => {
-    if (currentPlayer === 'O') setCurrentPlayer('X');
-    else setCurrentPlayer('O');
-  };
+  const { modalText, currentPlayer } = useSelector((state) => ({
+    modalText: state.game.modalText,
+    currentPlayer: state.game.currentPlayer,
+  }));
+  const dispatch = useDispatch();
 
   // 게임 초기화
-  const onReset = () => {
-    setSquares(new Array(9).fill(null));
-    setCurrentPlayer('O');
-  };
-
-  // 칸 선택했을시에
-  const onChoose = useCallback(
-    (id) => {
-      setSquares(
-        squares.map((square, index) => (index === id ? currentPlayer : square))
-      );
-      changePlayer();
-    },
-    [squares]
-  );
+  const onReset = () => dispatch(reset());
+  const [modal, setModal] = useState(null);
 
   // 모달 close
   const onClose = () => {
@@ -97,11 +66,11 @@ function App() {
     <>
       <GlobalStyle />
       <Container>
-        {modal && <Modal onClose={onClose}>{modal}</Modal>}
+        {modalText && <Modal onClose={onClose}>{modalText}</Modal>}
         <h1>React Tic Tac Toe</h1>
-        <GameBoard squares={squares} onChoose={onChoose} />
+        <GameBoard />
         <span>Current Player : {currentPlayer}</span>
-        <ResetButton onClick={onReset}>RESET</ResetButton>
+        <ResetButton onClick={onReset}>NEW GAME</ResetButton>
       </Container>
     </>
   );

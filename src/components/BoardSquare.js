@@ -11,8 +11,9 @@ const Square = styled.div`
   align-items: center;
   font-size: 70px;
   color: #f5f5f5;
+  // 선택된 square일시 cursor표시 뜨지않게
   ${(props) =>
-    props.mark &&
+    props.checked &&
     css`
       cursor: default;
     `}
@@ -20,9 +21,9 @@ const Square = styled.div`
 
 function BoardSquare({ id, mark, onChoose }) {
   if (mark !== null) {
-    // 선택된 보드
+    // 선택된 square는 마크를 표시해준다
     const shape = mark === 'O' ? <BsCircle /> : <BsXLg />;
-    return <Square mark={mark}>{shape}</Square>;
+    return <Square checked={true}>{shape}</Square>;
   }
   return <Square onClick={() => onChoose(id)}></Square>;
 }

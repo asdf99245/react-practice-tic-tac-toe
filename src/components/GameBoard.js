@@ -1,5 +1,7 @@
 import React from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import styled from 'styled-components';
+import { chooseSquare } from '../modules/game';
 import BoardSquare from './BoardSquare';
 
 const Board = styled.div`
@@ -10,7 +12,14 @@ const Board = styled.div`
   grid-template-rows: repeat(3, 1fr);
 `;
 
-function GameBoard({ squares, onChoose }) {
+function GameBoard() {
+  const { squares } = useSelector((state) => ({
+    squares: state.game.squares,
+  }));
+
+  const dispatch = useDispatch();
+  const onChoose = (id) => dispatch(chooseSquare(id));
+
   return (
     <Board>
       {squares.map((square, index) => (

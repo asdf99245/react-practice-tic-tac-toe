@@ -73,8 +73,8 @@ const CloseButton = styled.button`
 
 function Modal({ children, onClose }) {
   return (
-    <Background>
-      <ModalBox>
+    <Background onClick={onClose}>
+      <ModalBox onClick={(e) => e.stopPropagation()}>
         <CloseButton onClick={onClose}>
           <BsXLg />
         </CloseButton>
