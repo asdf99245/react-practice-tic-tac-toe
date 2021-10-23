@@ -17,13 +17,24 @@ const Square = styled.div`
     css`
       cursor: default;
     `}
+
+  ${(props) =>
+    props.highlight &&
+    css`
+      border-color: #8ce99a;
+    `}
 `;
 
-function BoardSquare({ id, mark, onChoose }) {
+function BoardSquare({ id, mark, resultSet, onChoose }) {
   if (mark !== null) {
     // 선택된 square는 마크를 표시해준다
     const shape = mark === 'O' ? <BsCircle /> : <BsXLg />;
-    return <Square checked={true}>{shape}</Square>;
+    return (
+      // 세 가지 사각형중 하나라면 highlight 표시해준다
+      <Square checked={true} highlight={resultSet.has(id)}>
+        {shape}
+      </Square>
+    );
   }
   return <Square onClick={() => onChoose(id)}></Square>;
 }

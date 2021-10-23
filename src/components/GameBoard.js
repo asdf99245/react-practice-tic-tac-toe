@@ -10,12 +10,18 @@ const Board = styled.div`
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: repeat(3, 1fr);
+  gap: 10px;
 `;
 
 function GameBoard() {
-  const { squares } = useSelector((state) => ({
+  const { squares, result } = useSelector((state) => ({
     squares: state.game.squares,
+    result: state.game.result,
   }));
+
+  // 정답인 세 가지 사각형
+  let resultSet = new Set();
+  if (result) resultSet = new Set(result);
 
   const dispatch = useDispatch();
   const onChoose = (id) => dispatch(chooseSquare(id));
@@ -23,7 +29,13 @@ function GameBoard() {
   return (
     <Board>
       {squares.map((square, index) => (
-        <BoardSquare key={index} id={index} mark={square} onChoose={onChoose} />
+        <BoardSquare
+          key={index}
+          id={index}
+          mark={square}
+          onChoose={onChoose}
+          resultSet={resultSet}
+        />
       ))}
     </Board>
   );

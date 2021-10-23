@@ -7,7 +7,7 @@ export const checkBoard = {
           squares[i] === squares[i + 3] &&
           squares[i + 3] === squares[i + 6]
         ) {
-          return true;
+          return [i, i + 3, i + 6];
         }
       }
     }
@@ -18,7 +18,7 @@ export const checkBoard = {
           squares[i] === squares[i + 1] &&
           squares[i + 1] === squares[i + 2]
         ) {
-          return true;
+          return [i, i + 1, i + 2];
         }
       }
     }
@@ -26,10 +26,10 @@ export const checkBoard = {
     // 대각선 확인
     if (squares[4] === player) {
       if (squares[0] === squares[4] && squares[4] === squares[8]) {
-        return true;
+        return [0, 4, 8];
       }
       if (squares[2] === squares[4] && squares[4] === squares[6]) {
-        return true;
+        return [2, 4, 6];
       }
     }
 

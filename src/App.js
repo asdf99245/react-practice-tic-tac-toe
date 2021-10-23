@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { createGlobalStyle } from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import GameBoard from './components/GameBoard';
 import Modal from './components/Modal';
-import { reset } from './modules/game';
+import { closeModal, reset } from './modules/game';
 
 const GlobalStyle = createGlobalStyle`
  *{
@@ -55,12 +55,7 @@ function App() {
 
   // 게임 초기화
   const onReset = () => dispatch(reset());
-  const [modal, setModal] = useState(null);
-
-  // 모달 close
-  const onClose = () => {
-    setModal(null);
-  };
+  const onClose = () => dispatch(closeModal());
 
   return (
     <>
