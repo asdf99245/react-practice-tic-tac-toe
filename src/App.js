@@ -5,19 +5,24 @@ import styled from 'styled-components';
 import GameBoard from './components/GameBoard';
 import Modal from './components/Modal';
 import { closeModal, reset } from './modules/game';
+import RecordList from './components/RecordList';
 
 const GlobalStyle = createGlobalStyle`
  *{
     box-sizing: border-box;
  }
  body {
-   background-color: black;
+   background-color: #212529;
  }
 `;
 
-const Container = styled.div`
+const Wrapper = styled.div`
+  display: flex;
+  justify-content: center;
+`;
+
+const BoardContainer = styled.div`
   width: 500px;
-  margin: 0 auto;
   margin-top: 30px;
   height: 650px;
   color: white;
@@ -35,6 +40,8 @@ const Container = styled.div`
 `;
 
 const ResetButton = styled.button`
+  background-color: white;
+  color: black;
   font-size: 24px;
   border-radius: 4px;
   border: none;
@@ -47,9 +54,10 @@ const ResetButton = styled.button`
 `;
 
 function App() {
-  const { modalText, currentPlayer } = useSelector((state) => ({
+  const { modalText, currentPlayer, winner } = useSelector((state) => ({
     modalText: state.game.modalText,
     currentPlayer: state.game.currentPlayer,
+    winner: state.game.winner,
   }));
   const dispatch = useDispatch();
 
@@ -60,13 +68,16 @@ function App() {
   return (
     <>
       <GlobalStyle />
-      <Container>
-        {modalText && <Modal onClose={onClose}>{modalText}</Modal>}
-        <h1>React Tic Tac Toe</h1>
-        <GameBoard />
-        <span>Current Player : {currentPlayer}</span>
-        <ResetButton onClick={onReset}>NEW GAME</ResetButton>
-      </Container>
+      <Wrapper>
+        <BoardContainer>
+          {modalText && <Modal onClose={onClose}>{modalText}</Modal>}
+          <h1>React Tic Tac Toe</h1>
+          <GameBoard />
+          <span>Current Player : {currentPlayer}</span>
+          <ResetButton onClick={onReset}>NEW GAME</ResetButton>
+        </BoardContainer>
+        {winner && <RecordList />}
+      </Wrapper>
     </>
   );
 }

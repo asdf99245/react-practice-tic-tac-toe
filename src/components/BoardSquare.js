@@ -4,13 +4,15 @@ import { BsCircle, BsXLg } from 'react-icons/bs';
 
 const Square = styled.div`
   background-color: transparent;
-  border: 3px solid #e17055;
+  border: 3px solid #ff6b6b;
+  box-shadow: 0px 2px 10px black;
   cursor: pointer;
   display: flex;
   justify-content: center;
   align-items: center;
   font-size: 70px;
-  color: #f5f5f5;
+  color: white;
+
   // 선택된 square일시 cursor표시 뜨지않게
   ${(props) =>
     props.checked &&

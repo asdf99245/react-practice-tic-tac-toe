@@ -14,9 +14,10 @@ const Board = styled.div`
 `;
 
 function GameBoard() {
-  const { squares, result } = useSelector((state) => ({
+  const { squares, result, nth } = useSelector((state) => ({
     squares: state.game.squares,
     result: state.game.result,
+    nth: state.game.nth,
   }));
 
   // 정답인 세 가지 사각형
@@ -28,7 +29,7 @@ function GameBoard() {
 
   return (
     <Board>
-      {squares.map((square, index) => (
+      {squares[nth].map((square, index) => (
         <BoardSquare
           key={index}
           id={index}
